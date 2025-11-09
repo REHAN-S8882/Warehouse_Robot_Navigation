@@ -1,0 +1,17 @@
+# Ignore Python cache and virtual environment
+__pycache__/
+venv/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore AWS IoT secrets and keys
+secrets/
+*.pem
+*.key
+*.crt
+
+# Ignore any local test data or logs
+*.log
+*.tmp

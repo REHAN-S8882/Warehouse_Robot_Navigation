@@ -1,0 +1,14 @@
+# Normalize line endings across systems
+* text=auto
+
+# Treat Python files as text
+*.py text diff=python
+*.md text
+*.yml text
+*.json text
+
+# Keep notebooks and binaries safe
+*.ipynb binary
+*.png binary
+*.jpg binary
+*.pdf binary

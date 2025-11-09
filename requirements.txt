@@ -1,0 +1,21 @@
+# Core Python Libraries
+numpy
+pandas
+matplotlib
+opencv-python
+
+# Deep Learning & Reinforcement Learning
+torch
+torchvision
+torchaudio
+gymnasium
+stable-baselines3
+
+# Cloud/Edge (optional, for expansion)
+boto3
+azure-iot-device
+google-cloud-storage
+
+# Visualization & Logging
+tensorboard
+
