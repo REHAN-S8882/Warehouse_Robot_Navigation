@@ -1,182 +1,158 @@
-# 🤖 Warehouse Robot Navigation Project
+# 🤖 Warehouse Robot Navigation System
 
-### Task 2 – Robotics: Warehouse Robot Navigation  
-**Scenario:** Robots navigate warehouse aisles and avoid obstacles autonomously.
+An intelligent **autonomous warehouse robot simulation** that uses **Computer Vision (OpenCV)** and **Reinforcement Learning (RL)** for path optimization — integrated with **AWS IoT Core** for real-time telemetry, data logging, and collision alerts.
 
 ---
 
 ## 🧠 Overview
-This project develops an **autonomous warehouse robot system** capable of:
-- Detecting and avoiding obstacles in real-time  
-- Optimizing navigation paths using Reinforcement Learning (RL)  
-- Deploying models for low-latency **edge inference**  
-- Leveraging cloud services for **model retraining and monitoring**
+
+Modern warehouses face challenges such as **slow deliveries**, **collisions**, and **manual monitoring**.  
+This project demonstrates how AI and IoT can solve these problems by enabling a robot to:
+- Detect obstacles using vision-based sensing.
+- Learn optimal navigation through RL (PPO algorithm).
+- Send telemetry data (battery, speed, collisions) to AWS IoT.
+- Trigger alerts via **AWS SNS** and store data in **S3** for analytics.
 
 ---
 
-## 🚩 Problem Identification
-- **Slow deliveries** due to inefficient path planning  
-- **Collisions** with shelves or other robots  
-- **Manual monitoring** required to recover from navigation errors  
+## ⚙️ System Architecture
+
+Sensors (LIDAR / Camera)
+↓
+Preprocessing (OpenCV)
+↓
+CNN Model → Obstacle Detection
+↓
+Reinforcement Learning (PPO Agent)
+↓
+IoT Core → MQTT Telemetry
+↓
+AWS S3 (Data Logging) + AWS SNS (Collision Alerts)
+↓
+Edge Deployment / Robot Actuators
+
+markdown
+Copy code
+
+🗂 **Key AWS Services Used:**
+- **AWS IoT Core** → Secure MQTT communication  
+- **AWS S3** → Stores telemetry logs (`iot/robot1/{timestamp}.json`)  
+- **AWS SNS** → Sends email alerts on collision  
+- **IAM Roles & Certificates** → For secure device authentication
 
 ---
 
-## 🧩 Solution Design
-### **1. Data Collection**
-- Sensors: **LIDAR** + **Camera (RGB)**  
-- Data transmitted through **IoT Gateway** (MQTT/HTTP) to Cloud  
-
-### **2. Preprocessing**
-- Sensor normalization (distance scaling, filtering)  
-- Image preprocessing (resizing, normalization, augmentation)
-
-### **3. Modeling**
-- **CNN** – Obstacle detection from camera frames  
-- **RL (PPO Algorithm)** – Path optimization & obstacle avoidance  
-
-### **4. Cloud Integration**
-- Services: **AWS Greengrass / Azure IoT Hub / GCP AI Platform**  
-- Cloud manages data ingestion, model retraining, and versioning  
-
-### **5. Deployment**
-- **Edge inference** using trained CNN + RL models  
-- Deployed via containers (Docker / Greengrass) for on-device operation  
-
-### **6. Monitoring**
-- Edge-to-Cloud telemetry for collisions, drift, latency  
-- Automatic alerts and retraining triggers  
-
----
-
-## 🏗️ System Architecture
-
-Sensors (LIDAR, Camera)
-↓
-IoT Gateway (Edge Device)
-↓
-Preprocessing (Sensor Normalization, Image Processing)
-↓
-CNN (Obstacle Detection) + RL (Path Optimization)
-↓
-Robot Actuators (Wheels, Motors)
-↓
-Cloud (IoT Core, SageMaker, Model Registry)
-↑
-Monitoring & Retraining Feedback Loop
-
-
-> See detailed diagram in `deliverables/architecture_diagram.md`.
-
----
-
-## 🧮 Model Details
-
-| Component | Description |
-|------------|--------------|
-| CNN | Detects obstacles using camera image frames |
-| RL (PPO) | Learns to navigate and optimize routes |
-| Frameworks | PyTorch, Stable-Baselines3, OpenCV, Gymnasium |
-| Training Steps | 50,000 timesteps (expandable) |
-| Output | `warehouse_robot_rl.zip` model file |
-
----
-
-## 🧰 Folder Structure
+## 📁 Project Structure
 
 Warehouse_Robot_Navigation/
 │
-├── data/ → Raw or simulated sensor data
-├── models/ → Saved CNN/RL model files
-├── scripts/ → All Python scripts (training, simulation, etc.)
-│ ├── obstacle_detection.py
+├── data/ # sensor or simulation data
+├── models/ # trained RL or CNN models
+├── scripts/ # preprocessing, detection, simulation
+│ ├── robot_publisher.py
 │ ├── robot_simulation.py
-│ ├── rl_env.py
 │ ├── train_rl_agent.py
-│ └── test_trained_agent.py
+│ ├── test_trained_agent.py
 │
-├── deliverables/ → Final report files
-│ ├── architecture_diagram.md
-│ └── summary.md
-│
-├── project_notes.md → Development log / notes
-├── main.py → Environment verification script
-└── README.md → This file
+├── deliverables/ # architecture diagram, 1-page summary
+├── secrets/ # AWS certs (ignored in git)
+├── main.py # main entry point
+├── requirements.txt # all dependencies
+├── README.md # this file
+└── project_notes.md # step-by-step documentation
 
+yaml
+Copy code
 
 ---
 
-## 🧪 How to Run
+## 🚀 Features
 
-### **1️⃣ Setup Environment**
-```bash
+✅ **Autonomous Simulation** using OpenCV  
+✅ **Obstacle Detection & Collision Avoidance**  
+✅ **Reinforcement Learning (PPO)** for Path Optimization  
+✅ **Cloud Integration via MQTT (AWS IoT Core)**  
+✅ **Automated Data Logging to S3**  
+✅ **Email Alerts on Collisions (AWS SNS)**  
+
+---
+
+## 🧩 Tech Stack
+
+| Category | Technologies |
+|-----------|---------------|
+| Programming | Python 3.12 |
+| Simulation | OpenCV, NumPy |
+| ML / RL | PyTorch, Stable-Baselines3 |
+| IoT | MQTT (paho-mqtt), AWS IoT Core |
+| Cloud | AWS S3, AWS SNS, IAM |
+| Tools | VS Code, Streamlit (optional UI) |
+
+---
+
+## 💡 Example Outputs
+
+**IoT Published Data:**
+```json
+{
+  "device": "robot1",
+  "status": "online",
+  "battery": 92,
+  "speed": 0.65,
+  "collisions": 0,
+  "ts": 17624113221
+}
+AWS SNS Alert Example:
+
+json
+Copy code
+{"device": "robot1", "status": "shutdown", "battery": 0, "speed": 0.32, "collisions": 1, "ts": 1762415237}
+🧠 How to Run
+1️⃣ Setup Environment
+bash
+Copy code
 python -m venv venv
 venv\Scripts\activate
-pip install -r requirements.txt   # or install manually
-
-2️⃣ Run Obstacle Detection Simulation
-python scripts/obstacle_detection.py
-
-3️⃣ Train the RL Model
+pip install -r requirements.txt
+2️⃣ Run Obstacle Simulation
+bash
+Copy code
+python scripts/robot_simulation.py
+3️⃣ Train RL Agent
+bash
+Copy code
 python scripts/train_rl_agent.py
+4️⃣ Publish IoT Telemetry to AWS
+bash
+Copy code
+python scripts/robot_publisher.py
+☁️ Cloud Integration Steps
+Create an AWS IoT Thing (robot1)
 
-4️⃣ Test the Trained Model
-python scripts/test_trained_agent.py
+Attach the certificates + policy
 
-📈 Deliverables
-Deliverable	Description	File
-Architecture Diagram	End-to-end system design	deliverables/architecture_diagram.md
-1-Page Summary	Concise project report	deliverables/summary.md
-Code Implementation	Python scripts for full workflow	scripts/ folder
-Logs & Models	Training outputs	models/ppo_nav/ folder
-☁️ Cloud Deployment (Concept)
-Layer	Example Platform	Role
-IoT Edge	AWS Greengrass / Azure IoT Edge	Edge inference, local model
-Cloud Core	AWS IoT Hub / GCP IoT Core	Device communication
-Model Training	SageMaker / Azure ML / Vertex AI	Retraining and monitoring
-Storage	S3 / Blob Storage / Cloud Storage	Sensor and model logs
-🏁 Expected Outcomes
+Create an IoT Rule → S3 for telemetry storage
 
-Autonomous obstacle avoidance with minimal collisions
+SQL: SELECT * FROM 'warehouse/robot1/status'
 
-Path optimization reduces travel time by >20% (simulated)
+Create an IoT Rule → SNS for alerts
 
-Scalable pipeline for retraining and continuous improvement
+Condition: collisions = 1
+
+Subscribe via email and confirm the link.
+
+🖼️ Architecture Diagram
+
+🧾 Deliverables
+📜 deliverables/architecture_diagram.md
+
+📄 deliverables/summary.md
+
+🧠 project_notes.md — full stepwise documentation
 
 👨‍💻 Author
-
-Developed by: Rehan Khan
-Tools: Python, VS Code, OpenCV, PyTorch, Stable-Baselines3
-Environment: Windows 11 + Virtual Environment (venv)
----
-
-## ☁️ Cloud IoT Integration (AWS)
-
-**Objective:** Connect the warehouse robot to AWS IoT Core for real-time telemetry and monitoring.
-
-### 🔧 Setup
-- AWS IoT Core endpoint:  
-  `a37wis2tab9brj-ats.iot.ap-south-1.amazonaws.com`
-- MQTT Topics:
-  - Publish → `warehouse/robot1/status`
-  - Subscribe → `warehouse/robot1/#`
-- Certificates stored in:  
-  `Warehouse_Robot_Navigation/secrets/robot1/`
-- Policy: **warehouse-robot-policy**  
-  (Allows `connect`, `publish`, `subscribe`, and `receive`)
-
-### 🧠 Results
-- ✅ Secure MQTT connection established (`rc=0`)
-- ✅ Message published successfully:
-  ```json
-  {
-    "device": "robot1",
-    "status": "online",
-    "battery": 87,
-    "ts": 1762397342
-  }
-
-✅ Project Completed: Warehouse Robot Navigation (Task 2 – Robotics)
-
-🗒️ Note
-
-If you push this folder to GitHub, this README will automatically appear as your project’s main description.
+Rehan Khan
+AI & Machine Learning Enthusiast | IoT Developer
+📍 India
+📧 16rehan687@gmail.com
+🌐 LinkedIn Profile:https://www.linkedin.com/in/rehan-khan-b413a7200/
