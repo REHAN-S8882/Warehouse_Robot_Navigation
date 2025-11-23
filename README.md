@@ -1,4 +1,4 @@
-# 🤖 Warehouse Robot Navigation System(https://ai-medical-diagnosis-mz8yefsch5xwtsqq28ftru.streamlit.app/)
+# 🤖 Warehouse Robot Navigation System
 
 An intelligent **autonomous warehouse robot simulation** that uses **Computer Vision (OpenCV)** and **Reinforcement Learning (RL)** for path optimization — integrated with **AWS IoT Core** for real-time telemetry, data logging, and collision alerts.
 
